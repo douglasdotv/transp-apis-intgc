@@ -1,32 +1,36 @@
 package br.com.dv.integracaoapitransport.app.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpClientErrorException.BadRequest.class)
-    public ResponseEntity<String> handleBadRequest() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request");
+    public String handleBadRequest(Model model) {
+        String errorMessage = "Bad request. Cause: " + HttpClientErrorException.BadRequest.class.getName();
+        model.addAttribute("error", errorMessage);
+        return "error";
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneralException() {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+    public String handleGeneralException(Model model) {
+        String errorMessage = "An error occurred. Cause: " + Exception.class.getName();
+        model.addAttribute("error", errorMessage);
+        return "error";
     }
 
     @ExceptionHandler(JadlogApiException.class)
-    public ResponseEntity<String> handleJadlogApiException(JadlogApiException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    public String handleJadlogApiException(JadlogApiException e, Model model) {
+        model.addAttribute("error", e.getMessage());
+        return "error";
     }
 
     @ExceptionHandler(CarriersApiException.class)
-    public ResponseEntity<String> handleCarriersApiException(CarriersApiException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    public String handleCarriersApiException(CarriersApiException e, Model model) {
+        model.addAttribute("error", e.getMessage());
+        return "error";
     }
 
 }
