@@ -14,12 +14,12 @@ public record Product(
         String specialDescriptor1,
         String specialDescriptor2,
         String specialDescriptor3,
-        int quantity,
-        double unitValue,
-        double unitWeight,
+        Integer quantity,
+        Double unitValue,
+        Double unitWeight,
         boolean bulky,
-        double unitHeight,
-        double unitLength,
-        double unitWidth
+        Double unitHeight,
+        Double unitLength,
+        Double unitWidth
 ) {
 }

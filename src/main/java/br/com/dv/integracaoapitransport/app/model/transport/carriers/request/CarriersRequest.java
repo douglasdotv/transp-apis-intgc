@@ -4,13 +4,15 @@ import br.com.dv.integracaoapitransport.app.model.fastcommerce.request.Fastcomme
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
+
 public record CarriersRequest(
         @JsonProperty("ValorDeclarado")
-        double valorDeclarado,
-        double peso,
-        double altura,
-        double largura,
-        double comprimento,
+        BigDecimal valorDeclarado,
+        Double peso,
+        Double altura,
+        Double largura,
+        Double comprimento,
         @JsonIgnore
         String cepDest
 ) {
@@ -19,9 +21,9 @@ public record CarriersRequest(
         this(
                 fastcommerceRequest.freightQuoteRequest().totalAmount(),
                 fastcommerceRequest.freightQuoteRequest().totalWeight(),
-                100,
-                10,
-                10,
+                0.0,
+                0.0,
+                0.0,
                 fastcommerceRequest.freightQuoteRequest().toCEP().replace("-", "")
         );
     }

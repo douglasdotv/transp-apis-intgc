@@ -4,5 +4,5 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public record JadlogResponse(@JsonProperty("frete") List<FreteResponse> frete, Error error) {
+public record JadlogResponse(@JsonProperty("frete") List<FreteResponse> frete, JadlogError error) {
 }

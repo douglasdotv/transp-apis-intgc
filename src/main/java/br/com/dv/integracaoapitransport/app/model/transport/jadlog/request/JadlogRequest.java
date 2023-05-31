@@ -3,6 +3,7 @@ package br.com.dv.integracaoapitransport.app.model.transport.jadlog.request;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.request.FastcommerceRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public record JadlogRequest(@JsonProperty("frete") List<FreteRequest> frete) {
@@ -21,7 +22,7 @@ public record JadlogRequest(@JsonProperty("frete") List<FreteRequest> frete) {
                         "D",
                         "N",
                         fastcommerceRequest.freightQuoteRequest().totalAmount(),
-                        0
+                        BigDecimal.ZERO
                 )
         ));
     }

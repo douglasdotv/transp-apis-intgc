@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.List;
 
@@ -46,15 +45,17 @@ public class JadlogService {
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .build();
 
-        try {
-            return webClient.post()
-                    .body(BodyInserters.fromValue(jadlogRequest))
-                    .retrieve()
-                    .bodyToMono(JadlogResponse.class)
-                    .block();
-        } catch (WebClientResponseException e) {
-            throw new JadlogApiException("Error response from Jadlog API: " + e.getResponseBodyAsString()); // ?????
+        JadlogResponse response = webClient.post()
+                .body(BodyInserters.fromValue(jadlogRequest))
+                .retrieve()
+                .bodyToMono(JadlogResponse.class)
+                .block();
+
+        if (response == null || response.frete().get(0).vltotal() == null) {
+            throw new JadlogApiException(response != null ? response.error().descricao() : null);
         }
+
+        return response;
     }
 
     /**
@@ -77,7 +78,7 @@ public class JadlogService {
         ShippingService shippingService = new ShippingService(
                 "Jadlog",
                 jadlogResponse.frete().get(0).vltotal(),
-                jadlogResponse.frete().get(0).prazo() + " dias" // + dias sfd\herj
+                jadlogResponse.frete().get(0).prazo() + " dias"
         );
 
         return new FreightQuoteResponse(

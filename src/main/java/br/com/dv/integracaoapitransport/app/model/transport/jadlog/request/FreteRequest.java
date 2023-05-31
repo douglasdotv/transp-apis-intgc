@@ -1,17 +1,19 @@
 package br.com.dv.integracaoapitransport.app.model.transport.jadlog.request;
 
+import java.math.BigDecimal;
+
 public record FreteRequest(
         String cepori,
         String cepdes,
         String frap,
-        double peso,
+        Double peso,
         String cnpj,
         String conta,
         String contrato,
-        int modalidade,
+        Integer modalidade,
         String tpentrega,
         String tpseguro,
-        double vldeclarado,
-        double vlcoleta
+        BigDecimal vldeclarado,
+        BigDecimal vlcoleta
 ) {
 }
