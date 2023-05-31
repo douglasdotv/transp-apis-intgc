@@ -1,6 +1,5 @@
 package br.com.dv.integracaoapitransport.app.service;
 
-import br.com.dv.integracaoapitransport.app.exception.CarriersApiException;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.request.FastcommerceRequest;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.response.FastcommerceResponse;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.response.FreightQuoteResponse;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,7 +36,7 @@ public class CarriersService {
      * @param carriersRequest The CarriersRequest object to be sent to Carriers API.
      * @return CarriersResponse The CarriersResponse object returned from Carriers API.
      */
-    public CarriersResponse callCarriersApi(CarriersRequest carriersRequest) {
+    public FastcommerceResponse callCarriersApi(CarriersRequest carriersRequest) {
         String url = "http://api.carriers.com.br/client/Carriers/Rates/" + carriersRequest.cepDest();
 
         WebClient webClient = WebClient.builder()
@@ -52,10 +52,11 @@ public class CarriersService {
                 .block();
 
         if (response == null || response.status().equals("erro")) {
-            throw new CarriersApiException(response != null ? response.errors().get(0).message() : null);
+            String errorMessage = response != null ? response.errors().get(0).message() : "Erro ao consultar API Carriers";
+            return buildErrorResponse(errorMessage);
         }
 
-        return response;
+        return buildFastcommerceResponse(response);
     }
 
     /**
@@ -66,6 +67,24 @@ public class CarriersService {
      */
     public FastcommerceResponse buildFastcommerceResponse(CarriersResponse carriersResponse) {
         return new FastcommerceResponse(buildFreightQuoteResponse(carriersResponse));
+    }
+
+    /**
+     * Build FastcommerceResponse with error
+     *
+     * @param errorMessage The error message to be returned.
+     * @return FastcommerceResponse The FastcommerceResponse object with error.
+     */
+    private FastcommerceResponse buildErrorResponse(String errorMessage) {
+        FreightQuoteResponse freightQuoteResponse = new FreightQuoteResponse(
+                -1,
+                errorMessage,
+                false,
+                false,
+                new ArrayList<>()
+        );
+
+        return new FastcommerceResponse(freightQuoteResponse);
     }
 
     /**

@@ -17,7 +17,7 @@ public class RestApiController {
         this.mainService = mainService;
     }
 
-    @PostMapping("/api")
+    @PostMapping
     public ResponseEntity<FastcommerceResponse> handleRequest(@RequestBody FastcommerceRequest fastcommerceRequest) {
         return ResponseEntity.ok(mainService.handleRequest(fastcommerceRequest));
     }

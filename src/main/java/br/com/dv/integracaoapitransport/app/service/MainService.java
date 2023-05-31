@@ -25,14 +25,12 @@ public class MainService {
     public FastcommerceResponse handleRequest(FastcommerceRequest fcRequest) {
         // Jadlog
         var jadlogRequest = jadlogService.convertFastcommerceRequestToJadlogRequest(fcRequest);
-        var jadlogResponse = jadlogService.callJadlogApi(jadlogRequest);
-        var jadlogFcResponse = jadlogService.buildFastcommerceResponse(jadlogResponse);
+        var jadlogFcResponse = jadlogService.callJadlogApi(jadlogRequest);
         fcResponses.add(jadlogFcResponse);
 
         // Carriers
         var carriersRequest = carriersService.convertFastcommerceRequestToCarriersRequest(fcRequest);
-        var carriersResponse = carriersService.callCarriersApi(carriersRequest);
-        var carriersFcResponse = carriersService.buildFastcommerceResponse(carriersResponse);
+        var carriersFcResponse = carriersService.callCarriersApi(carriersRequest);
         fcResponses.add(carriersFcResponse);
 
         var shippingServices = new ArrayList<ShippingService>();
@@ -48,6 +46,7 @@ public class MainService {
                 shippingServices
         ));
 
+        // For next requests
         fcResponses.clear();
 
         return finalFcResponse;
