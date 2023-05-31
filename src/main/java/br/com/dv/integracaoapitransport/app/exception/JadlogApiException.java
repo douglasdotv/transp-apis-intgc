@@ -6,8 +6,4 @@ public class JadlogApiException extends RuntimeException {
         super(message);
     }
 
-    public JadlogApiException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
 }

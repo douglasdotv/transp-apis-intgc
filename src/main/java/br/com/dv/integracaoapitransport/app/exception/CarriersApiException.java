@@ -6,8 +6,4 @@ public class CarriersApiException extends RuntimeException {
         super(message);
     }
 
-    public CarriersApiException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
 }
