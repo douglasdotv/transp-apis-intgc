@@ -2,6 +2,8 @@ package br.com.dv.integracaoapitransport.app.controller;
 
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.request.FastcommerceRequest;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.response.FastcommerceResponse;
+import br.com.dv.integracaoapitransport.app.service.MainService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,15 +11,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/")
 public class MyController {
 
-    private final br.com.dv.integracaoapitransport.app.service.MainService mainService;
+    private final MainService mainService;
 
-    public MyController(br.com.dv.integracaoapitransport.app.service.MainService mainService) {
+    public MyController(MainService mainService) {
         this.mainService = mainService;
     }
 
     @PostMapping
-    public FastcommerceResponse handleRequest(@RequestBody FastcommerceRequest fastcommerceRequest) {
-        return mainService.handleRequest(fastcommerceRequest);
+    public ResponseEntity<FastcommerceResponse> handleRequest(@RequestBody FastcommerceRequest fastcommerceRequest) {
+        return ResponseEntity.ok(mainService.handleRequest(fastcommerceRequest));
     }
 
     @GetMapping
