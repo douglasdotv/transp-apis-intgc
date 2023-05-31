@@ -1,13 +1,12 @@
 package br.com.dv.integracaoapitransport.app.service;
 
+import br.com.dv.integracaoapitransport.app.exception.CarriersApiException;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.request.FastcommerceRequest;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.response.FastcommerceResponse;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.response.FreightQuoteResponse;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.response.ShippingService;
 import br.com.dv.integracaoapitransport.app.model.transport.carriers.request.CarriersRequest;
 import br.com.dv.integracaoapitransport.app.model.transport.carriers.response.CarriersResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.List;
 @Service
 public class CarriersService {
 
-    private final Logger log = LoggerFactory.getLogger(CarriersService.class);
     private final String token = System.getenv("CARRIERS_TOKEN");
 
     public CarriersRequest convertFastcommerceRequestToCarriersRequest(FastcommerceRequest fastcommerceRequest) {
@@ -43,8 +41,7 @@ public class CarriersService {
                     .bodyToMono(CarriersResponse.class)
                     .block();
         } catch (WebClientResponseException e) {
-            log.error("Error response from Jadlog API: " + e.getResponseBodyAsString());
-            throw e;
+            throw new CarriersApiException("Error response from Jadlog API: " + e.getResponseBodyAsString()); // ?????
         }
     }
 

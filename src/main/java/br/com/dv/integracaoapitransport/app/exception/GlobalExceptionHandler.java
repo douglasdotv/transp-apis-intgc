@@ -19,4 +19,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
     }
 
+    @ExceptionHandler(JadlogApiException.class)
+    public ResponseEntity<String> handleJadlogApiException(JadlogApiException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
+    @ExceptionHandler(CarriersApiException.class)
+    public ResponseEntity<String> handleCarriersApiException(CarriersApiException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
 }

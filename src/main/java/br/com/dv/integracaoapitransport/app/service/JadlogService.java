@@ -1,13 +1,12 @@
 package br.com.dv.integracaoapitransport.app.service;
 
+import br.com.dv.integracaoapitransport.app.exception.JadlogApiException;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.request.FastcommerceRequest;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.response.FastcommerceResponse;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.response.FreightQuoteResponse;
 import br.com.dv.integracaoapitransport.app.model.fastcommerce.response.ShippingService;
 import br.com.dv.integracaoapitransport.app.model.transport.jadlog.request.JadlogRequest;
 import br.com.dv.integracaoapitransport.app.model.transport.jadlog.response.JadlogResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.List;
 @Service
 public class JadlogService {
 
-    private final Logger log = LoggerFactory.getLogger(JadlogService.class);
     private final String token = System.getenv("JADLOG_TOKEN");
 
     /**
@@ -55,8 +53,7 @@ public class JadlogService {
                     .bodyToMono(JadlogResponse.class)
                     .block();
         } catch (WebClientResponseException e) {
-            log.error("Error response from Jadlog API: " + e.getResponseBodyAsString());
-            throw e;
+            throw new JadlogApiException("Error response from Jadlog API: " + e.getResponseBodyAsString()); // ?????
         }
     }
 
