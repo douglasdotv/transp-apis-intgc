@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 @RestController
 public class RestApiController {
 
@@ -23,11 +26,12 @@ public class RestApiController {
 
     @PostMapping
     public ResponseEntity<FastcommerceResponse> handleRequest(@RequestBody String payload) {
+        payload = URLDecoder.decode(payload, StandardCharsets.UTF_8);
+
         String json = payload.trim();
         if (json.startsWith("quote")) {
             json = json.substring(6);
         }
-
         FastcommerceRequest fcRequest;
         try {
             fcRequest = objectMapper.readValue(json, FastcommerceRequest.class);
