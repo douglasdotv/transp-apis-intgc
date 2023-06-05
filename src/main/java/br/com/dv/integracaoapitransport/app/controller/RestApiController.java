@@ -24,7 +24,7 @@ public class RestApiController {
         this.objectMapper = objectMapper;
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<FastcommerceResponse> handleRequest(@RequestBody String payload) {
         payload = URLDecoder.decode(payload, StandardCharsets.UTF_8);
 
