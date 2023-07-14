@@ -5,6 +5,8 @@ import br.com.dv.integracaoapitransport.app.model.fastcommerce.response.Fastcomm
 import br.com.dv.integracaoapitransport.app.service.MainService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +20,7 @@ public class RestApiController {
 
     private final MainService mainService;
     private final ObjectMapper objectMapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestApiController.class);
 
     public RestApiController(MainService mainService, ObjectMapper objectMapper) {
         this.mainService = mainService;
@@ -28,6 +31,8 @@ public class RestApiController {
     public ResponseEntity<FastcommerceResponse> handleRequest(@RequestBody String payload) {
         payload = URLDecoder.decode(payload, StandardCharsets.UTF_8);
 
+        LOGGER.info("Received payload: {}", payload);
+
         String json = payload.trim();
         if (json.startsWith("quote")) {
             json = json.substring(6);
@@ -35,8 +40,9 @@ public class RestApiController {
         FastcommerceRequest fcRequest;
         try {
             fcRequest = objectMapper.readValue(json, FastcommerceRequest.class);
+            LOGGER.info("Parsed request: {}", fcRequest);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error("Error processing JSON", e);
             return ResponseEntity.badRequest().build();
         }
 
